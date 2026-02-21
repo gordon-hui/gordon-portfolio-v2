@@ -76,7 +76,22 @@ function FadeIn({ children, delay = 0, className = "" }) {
 function Nav({ theme, toggleTheme, c }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [logoClicks, setLogoClicks] = useState(0);
+  const logoClickTimer = useRef(null);
   const router = useRouter();
+
+  const handleLogoClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const next = logoClicks + 1;
+    if (next >= 5) {
+      setLogoClicks(0);
+      window.open("https://gordon-blog.sanity.studio", "_blank");
+    } else {
+      setLogoClicks(next);
+      clearTimeout(logoClickTimer.current);
+      logoClickTimer.current = setTimeout(() => setLogoClicks(0), 2000);
+    }
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -111,7 +126,7 @@ function Nav({ theme, toggleTheme, c }) {
     >
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <span
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={handleLogoClick}
           style={{ fontFamily: "'Lora', Georgia, serif", fontSize: 20, fontWeight: 700, color: c.text, cursor: "pointer", letterSpacing: "-0.02em" }}
         >
           GH
