@@ -117,7 +117,6 @@ export default function BlogPage() {
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
 
   useEffect(() => {
-    // Try to fetch posts from Sanity via API route
     fetch("/api/posts")
       .then((res) => res.json())
       .then((data) => {
@@ -130,35 +129,6 @@ export default function BlogPage() {
         setLoading(false);
       });
   }, []);
-
-  const placeholderPosts = [
-    {
-      title: "From JavaScript to Python: What I Wish I Knew Earlier",
-      excerpt:
-        "Scoping, closures, and hoisting — the mental model shifts that tripped me up and how I got past them.",
-      publishedAt: null,
-      tags: ["Python", "JavaScript"],
-      slug: null,
-    },
-    {
-      title: "My AI Engineering Learning Roadmap",
-      excerpt:
-        "A structured plan for going from frontend engineer to AI-literate builder. Tools, resources, and milestones.",
-      publishedAt: null,
-      tags: ["AI", "Career"],
-      slug: null,
-    },
-    {
-      title: "How I Use AI Models in My Dev Workflow",
-      excerpt:
-        "Different models for different phases — from scoping to debugging. My real workflow, not the hype.",
-      publishedAt: null,
-      tags: ["AI", "Productivity"],
-      slug: null,
-    },
-  ];
-
-  const displayPosts = posts.length > 0 ? posts : placeholderPosts;
 
   return (
     <div
@@ -281,9 +251,19 @@ export default function BlogPage() {
           >
             Loading posts...
           </p>
+        ) : posts.length === 0 ? (
+          <p
+            style={{
+              fontFamily: "'Nunito Sans', sans-serif",
+              fontSize: 14,
+              color: c.textMuted,
+            }}
+          >
+            No posts yet — check back soon.
+          </p>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {displayPosts.map((post, i) => (
+            {posts.map((post, i) => (
               <BlogCard key={post._id || i} post={post} c={c} />
             ))}
           </div>
