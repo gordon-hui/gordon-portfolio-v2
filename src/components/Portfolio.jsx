@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Moon, Sun, ChevronDown, ChevronUp, ExternalLink, ArrowRight, Linkedin, Mail, Send } from "lucide-react";
 
 const COLORS = {
@@ -75,6 +76,7 @@ function FadeIn({ children, delay = 0, className = "" }) {
 function Nav({ theme, toggleTheme, c }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -84,8 +86,12 @@ function Nav({ theme, toggleTheme, c }) {
 
   const links = ["About", "Experience", "Projects", "Blog", "Contact"];
 
-  const scrollTo = (id) => {
-    document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
+  const handleNavClick = (l) => {
+    if (l === "Blog") {
+      router.push("/blog");
+    } else {
+      document.getElementById(l.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
+    }
     setMobileOpen(false);
   };
 
@@ -117,7 +123,7 @@ function Nav({ theme, toggleTheme, c }) {
             {links.map((l) => (
               <span
                 key={l}
-                onClick={() => scrollTo(l)}
+                onClick={() => handleNavClick(l)}
                 style={{ fontSize: 14, color: c.textSecondary, cursor: "pointer", letterSpacing: "0.03em", fontFamily: "'Nunito Sans', sans-serif", transition: "color 0.2s" }}
                 onMouseEnter={(e) => (e.target.style.color = c.accent)}
                 onMouseLeave={(e) => (e.target.style.color = c.textSecondary)}
@@ -152,7 +158,7 @@ function Nav({ theme, toggleTheme, c }) {
           {links.map((l) => (
             <span
               key={l}
-              onClick={() => scrollTo(l)}
+              onClick={() => handleNavClick(l)}
               style={{ fontSize: 15, color: c.textSecondary, cursor: "pointer", fontFamily: "'Nunito Sans', sans-serif" }}
             >
               {l}
